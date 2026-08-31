@@ -1,6 +1,6 @@
+package org.example;
 import java.util.Random;
 import java.util.Scanner;
-
 public class Ruleta {
 
     public static final int MAX_HISTORIAL = 100;
@@ -10,7 +10,6 @@ public class Ruleta {
     public static int historialSize = 0;
 
     public static Random rng = new Random();
-
     public static int[] numerosRojos = {
             1, 3, 5, 7, 9, 12, 14, 16, 18,
             19, 21, 23, 25, 27, 30, 32, 34, 36
@@ -21,7 +20,14 @@ public class Ruleta {
     }
 
     public static void menu() {
+        Scanner in = new Scanner(System.in);
+        int opcion;
+        do {
+            mostrarMenu();
+            opcion = leerOpcion(in);
+            ejecutarOpcion(opcion, in);
 
+        } while (opcion != 3);
     }
 
     public static void mostrarMenu() {
