@@ -41,12 +41,36 @@ public class Ruleta {
     }
 
     public static int leerOpcion(Scanner in) {
-        // TODO: Leer y retornar la opción ingresada.
-        return 0;
-    }
 
+        while (!in.hasNextInt()) {
+            System.out.println("Debe ingresar un numero");
+            in.next();
+            System.out.println("Seleccione la opcion");
+        }
+        int opcion = in.nextInt();
+
+        if (opcion < 1 || opcion > 3) {
+            System.out.println("opcion no valida");
+            return 0;
+        }
+        return opcion;
+    }
     public static void ejecutarOpcion(int opcion, Scanner in) {
-        // TODO: Ejecutar la acción asociada a la opción.
+        switch (opcion) {
+
+            case 1:
+                iniciarRonda(in);
+                break;
+            case 2:
+                mostrarEstadisticas();
+                break;
+            case 3:
+                System.out.println("saliendo del programa");
+                break;
+            default:
+                System.out.println("Seleccione una opcion valida");
+
+        }
     }
 
     public static void iniciarRonda(Scanner in) {
@@ -60,8 +84,7 @@ public class Ruleta {
 
     public static int girarRuleta() {
         // TODO: Generar y retornar un número entre 0 y 36.
-        return 0;
-    }
+        return 0;}
 
     public static boolean evaluarResultado(int numero, char tipo) {
         // TODO: Evaluar el resultado según el tipo de apuesta.
