@@ -74,7 +74,17 @@ public class Ruleta {
     }
 
     public static void iniciarRonda(Scanner in) {
-        // TODO: Implementar el flujo completo de una ronda.
+        char tipo = leerTipoApuesta(in);
+        System.out.println("ingrese el monto de apuesta: ");
+        int monto =in.nextInt();
+        in.nextLine();
+
+        int numero = girarRuleta();
+        boolean acierto = evaluarResultado(numero, tipo);
+        registrarResultado(numero, monto, acierto);
+        mostrarResultado(numero, tipo, monto, acierto);
+
+
     }
 
     public static char leerTipoApuesta(Scanner in) {
@@ -83,7 +93,7 @@ public class Ruleta {
     }
 
     public static int girarRuleta() {
-        // TODO: Generar y retornar un número entre 0 y 36.
+        System.out.println("Tipo de apuesta ( R: ROJO, N: Negro, P: Par, I:Impar): ");
         return 0;}
 
     public static boolean evaluarResultado(int numero, char tipo) {
