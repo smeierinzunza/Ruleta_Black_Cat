@@ -14,7 +14,7 @@ public class Ruleta {
             19, 21, 23, 25, 27, 30, 32, 34, 36
     };
 
-    
+
     public static void main(String[] args) {
         menu();
     }
@@ -87,27 +87,70 @@ public class Ruleta {
     }
 
     public static char leerTipoApuesta(Scanner in) {
-        // TODO: Leer y validar el tipo de apuesta.
-        return ' ';
+        char tipo = ' ';
+        boolean valido = false;
+
+        while (!valido) {
+            System.out.print("Seleccione tipo de apuesta (R: Rojo, N: Negro, P: Par, I: Impar): ");
+            String entrada = in.nextLine().trim().toUpperCase();
+
+            if (entrada.length() == 1) {
+                tipo = entrada.charAt(0);
+                if (tipo == 'R' || tipo == 'N' || tipo == 'P' || tipo == 'I') {
+                    valido = true;
+                } else {
+                    System.out.println("Opción inválida. Ingrese R, N, P o I.");
+                }
+            } else {
+                System.out.println("Entrada inválida. Intente de nuevo.");
+            }
+        }
+        return tipo;
     }
 
     public static int girarRuleta() {
-        System.out.println("Tipo de apuesta ( R: ROJO, N: Negro, P: Par, I:Impar): ");
-        return 0;}
+        return rng.nextInt(37);
+    }
 
     public static boolean evaluarResultado(int numero, char tipo) {
-        // TODO: Evaluar el resultado según el tipo de apuesta.
+        if (numero == 0) {
+            return false;
+        }
+        switch (tipo) {
+            case 'R':
+                return esRojo(numero);
+            case 'N':
+                return !esRojo(numero);
+            case 'P':
+                return numero % 2 == 0;
+            case 'I':
+                return numero % 2 != 0;
+            default:
+                return false;
+
         return false;
     }
 
     public static boolean esRojo(int n) {
-        // TODO: Buscar el número en el arreglo numerosRojos.
-        return false;
-    }
+            for (int rojo : numerosRojos) {
+                if (rojo == n) {
+                    return true;
+                }
+            }
+            return false;
 
 
     public static void registrarResultado(int numero, int apuesta, boolean acierto) {
-        // TODO: Guardar los datos sin superar MAX_HISTORIAL.
+                if (historialSize < MAX_HISTORIAL) {
+                    historialNumeros[historialSize] = numero;
+                    historialApuestas[historialSize] = apuesta;
+                    historialAciertos[historialSize] = acierto;
+                    historialSize++;
+                } else {
+                    System.out.println("¡Atención! El historial de rondas ha alcanzado su límite máximo.");
+                }
+            }
+            }
     }
 
     public static void mostrarResultado(int numero, char tipo, int monto, boolean acierto) {
