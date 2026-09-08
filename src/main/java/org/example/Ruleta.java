@@ -1,6 +1,8 @@
 package org.example;
 import java.util.Random;
 import java.util.Scanner;
+
+
 public class Ruleta {
 
     public static final int MAX_HISTORIAL = 100;
@@ -15,8 +17,7 @@ public class Ruleta {
     };
 
 
-    public static void main(String[] args) {
-
+    static void main(String[] args) {
         menu();
     }
 
