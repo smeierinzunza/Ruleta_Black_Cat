@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public class VentanaLogin {
-    public static final List USUARIOS = new ArrayList<>();
+    public static final List <Usuario> USUARIOS = new ArrayList<>();
 
     private final JFrame frame = new JFrame("Login - Casino Black Cat");
     private final JLabel lblUsuario = new JLabel("Usuario:");

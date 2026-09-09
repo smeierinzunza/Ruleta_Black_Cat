@@ -4,6 +4,7 @@ import javax.swing.*;
 public class VentanaSaludo {
     private final String nombreUsuario;
     public VentanaSaludo(String nombreUsuario) {
+
         this.nombreUsuario = nombreUsuario;
     }
     public void mostrarVentana(){
