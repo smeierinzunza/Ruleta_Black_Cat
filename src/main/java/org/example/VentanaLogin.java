@@ -10,9 +10,9 @@ public class VentanaLogin {
 
     private final JFrame frame = new JFrame("Login - Casino Black Cat");
     private final JLabel lblUsuario = new JLabel("Usuario:");
-    private final JTextField txtUsuario = new JTextField(20);
+    private final JTextField txtUsuario = new JTextField(15);
     private final JLabel lblClave = new JLabel("Clave:");
-    private final JPasswordField txtClave = new JPasswordField(20);
+    private final JPasswordField txtClave = new JPasswordField(15);
     private final JButton btnIngresar = new JButton("Ingresar");
     private final JButton btnRegistrar = new JButton("Regitrarse");
 
@@ -51,7 +51,7 @@ public class VentanaLogin {
             frame.dispose();
             new VentanaSaludo(nombreUsuario).mostrarVentana();
         } else {
-            JOptionPane.showMessageDialog(frame, "Credenciales incorrectas. Intente nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Credenciales Erroneas. Intente nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     private String validarCredenciales(String u, String p) {
