@@ -11,12 +11,11 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public boolean valiarCredenciales(String u, String p){
-
+    public boolean validarCredenciales(String u, String p) {
         return this.username.equals(u) && this.password.equals(p);
     }
-    public String getNombre() {
 
+    public String getNombre() {
         return nombre;
     }
 }
