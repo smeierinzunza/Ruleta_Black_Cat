@@ -1,8 +1,8 @@
-package org.example;
+package org.example.launcher;
+
+import org.example.vista.VentanaLogin;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 
 public class Launcher {

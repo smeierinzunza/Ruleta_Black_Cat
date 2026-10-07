@@ -1,4 +1,4 @@
-package org.example;
+package org.example.modelo;
 
 public class Usuario {
     private String username;

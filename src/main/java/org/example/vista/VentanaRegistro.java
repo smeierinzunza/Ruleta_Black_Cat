@@ -1,4 +1,6 @@
-package org.example;
+package org.example.vista;
+import org.example.modelo.Usuario;
+
 import javax.swing.*;
 import java.awt.*;
 
