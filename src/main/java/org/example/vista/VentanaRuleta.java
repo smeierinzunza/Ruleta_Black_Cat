@@ -1,95 +1,93 @@
 package org.example.vista;
 
-import org.example.modelo.Ruleta;
+import org.example.controlador.ResultadoController;
+import org.example.controlador.RuletaController;
+import org.example.controlador.SessionController;
+import org.example.modelo.Resultado;
+import org.example.modelo.TipoApuesta;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class VentanaRuleta {
+    private final SessionController session;
+    private final RuletaController ruletaController;
     private final JFrame frame = new JFrame("RULETA - Juego");
-    private final Ruleta motorRuleta;
-    private final String nombreUsuario;
 
-    private final JComboBox<String> cmbTipoApuesta = new JComboBox<>(new String[]{"Color", "Paridad"});
-    private final JComboBox<String> cmbOpciones = new JComboBox<>(new String[]{"Rojo (R)", "Negro (N)"});
+    private final JComboBox<TipoApuesta> cmbTipoApuesta = new JComboBox<>(TipoApuesta.values());
     private final JTextField txtMonto = new JTextField(10);
     private final JLabel lblResultado = new JLabel("Esperando apuesta...");
+    private final JLabel lblSaldo = new JLabel();
 
-    public VentanaRuleta(String nombreUsuario, Ruleta motorRuleta) {
-        this.nombreUsuario = nombreUsuario;
-        this.motorRuleta = motorRuleta; // Recibe el motor lógico
-        configurarComponentes();
+    public VentanaRuleta(SessionController session, ResultadoController resultadoController) {
+        this.session = session;
+        this.ruletaController = new RuletaController(session, resultadoController);
+        configurarUI();
     }
 
-    private void configurarComponentes() {
+    private void configurarUI() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 300);
+        frame.setSize(500, 320);
         frame.setLayout(new BorderLayout());
 
-        JPanel panelFormulario = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel panelFormulario = new JPanel(new GridLayout(3, 2, 10, 10));
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
 
-        panelFormulario.add(new JLabel("Tipo de apuesta:"));
+        panelFormulario.add(new JLabel("Tipo de Apuesta:"));
         panelFormulario.add(cmbTipoApuesta);
-        panelFormulario.add(new JLabel("Seleccione opción:"));
-        panelFormulario.add(cmbOpciones);
-        panelFormulario.add(new JLabel("Monto:"));
 
-        JPanel panelMonto = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        panelMonto.add(txtMonto);
-        panelFormulario.add(panelMonto);
+        panelFormulario.add(new JLabel("Monto a Apostar:"));
+        panelFormulario.add(txtMonto);
 
         JButton btnGirar = new JButton("Girar");
         JButton btnVolver = new JButton("Volver al Menú");
+
         panelFormulario.add(btnGirar);
         panelFormulario.add(btnVolver);
 
+        actualizarSaldo();
+
+        JPanel panelInferior = new JPanel(new GridLayout(2, 1));
         lblResultado.setHorizontalAlignment(SwingConstants.CENTER);
-        lblResultado.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
+        lblSaldo.setHorizontalAlignment(SwingConstants.CENTER);
+
+        panelInferior.add(lblResultado);
+        panelInferior.add(lblSaldo);
 
         frame.add(panelFormulario, BorderLayout.CENTER);
-        frame.add(lblResultado, BorderLayout.SOUTH);
-
-        // Dinamismo del ComboBox
-        cmbTipoApuesta.addActionListener(e -> actualizarOpciones());
-
-        // Eventos de botones
-        btnVolver.addActionListener(e -> {
-            frame.dispose();
-            new VentanaMenu(nombreUsuario).mostrarVentana();
-        });
+        frame.add(panelInferior, BorderLayout.SOUTH);
 
         btnGirar.addActionListener(e -> procesarApuesta());
-    }
-
-    private void actualizarOpciones() {
-        cmbOpciones.removeAllItems();
-        if (cmbTipoApuesta.getSelectedIndex() == 0) {
-            cmbOpciones.addItem("Rojo (R)");
-            cmbOpciones.addItem("Negro (N)");
-        } else {
-            cmbOpciones.addItem("Par (P)");
-            cmbOpciones.addItem("Impar (I)");
-        }
+        btnVolver.addActionListener(e -> {
+            frame.dispose();
+            new VentanaMenu(session).mostrarVentana();
+        });
     }
 
     private void procesarApuesta() {
         try {
             int monto = Integer.parseInt(txtMonto.getText().trim());
-            if (monto <= 0) throw new NumberFormatException();
-            String seleccion = (String) cmbOpciones.getSelectedItem();
-            char tipoApuesta = seleccion.charAt(seleccion.length() - 2);
-            int numeroObtenido = motorRuleta.girarRuleta();
-            boolean acierto = motorRuleta.evaluarResultado(numeroObtenido, tipoApuesta);
-            motorRuleta.registrarResultado(numeroObtenido, monto, acierto);
-            String estado = acierto ? "GANASTE" : "PERDISTE";
+            TipoApuesta tipo = (TipoApuesta) cmbTipoApuesta.getSelectedItem();
+
+            Resultado res = ruletaController.realizarApuesta(tipo, monto);
+
+            String estado = res.isAcierto() ? "GANASTE" : "PERDISTE";
             lblResultado.setText(String.format("Número: %d | Apuesta: %s | %s $%d",
-                    numeroObtenido, tipoApuesta, estado, monto));
-        }
-        catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(frame, "Ingrese un monto válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                    res.getNumero(), res.getTipo(), estado, res.getMonto()));
+
+            actualizarSaldo();
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(frame, "Ingrese un monto numérico válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
+
+    private void actualizarSaldo() {
+        lblSaldo.setText("Saldo Disponible: $" + ruletaController.getSaldoActual());
+    }
+
     public void mostrarVentana() {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

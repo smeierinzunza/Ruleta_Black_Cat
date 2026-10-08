@@ -1,22 +1,22 @@
 package org.example.vista;
-import org.example.modelo.Usuario;
 
+import org.example.controlador.SessionController;
 import javax.swing.*;
 import java.awt.*;
 
 public class VentanaRegistro {
-    private final JFrame frame = new JFrame("Casino Black Cat - Registro");
-    private final JTextField txtUsuario = new JTextField(15);
-    private final JPasswordField txtClave = new JPasswordField(15);
-    private final JTextField txtNombre = new JTextField(15);
-    private final JButton btnGuardar = new JButton("Registrar");
-    private final JButton btnVolver = new JButton("Volver");
+    private final SessionController session;
+    private final JFrame frame = new JFrame("Registro - Casino Black Cat");
+    private final JTextField txtUsuario = new JTextField();
+    private final JPasswordField txtClave = new JPasswordField();
+    private final JTextField txtNombre = new JTextField();
 
-    public VentanaRegistro() {
-        configurarComponentes();
+    public VentanaRegistro(SessionController session) {
+        this.session = session;
+        configurarUI();
     }
 
-    private void configurarComponentes() {
+    private void configurarUI() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(350, 220);
         frame.setLayout(new GridLayout(4, 2, 8, 8));
@@ -27,33 +27,32 @@ public class VentanaRegistro {
         frame.add(txtClave);
         frame.add(new JLabel("Nombre Completo:"));
         frame.add(txtNombre);
+
+        JButton btnGuardar = new JButton("Registrar");
+        JButton btnVolver = new JButton("Volver");
         frame.add(btnGuardar);
         frame.add(btnVolver);
 
-        btnGuardar.addActionListener(e -> registrarUsuario());
-        btnVolver.addActionListener(e -> volverLogin());
+        btnGuardar.addActionListener(e -> registrar());
+        btnVolver.addActionListener(e -> {
+            frame.dispose();
+            new VentanaLogin(session).mostrarVentana();
+        });
+    }
+
+    private void registrar() {
+        try {
+            session.registrarUsuario(txtUsuario.getText(), new String(txtClave.getPassword()), txtNombre.getText());
+            JOptionPane.showMessageDialog(frame, "¡Registro exitoso! Por favor inicie sesión.");
+            frame.dispose();
+            new VentanaLogin(session).mostrarVentana();
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error de Registro", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     public void mostrarVentana() {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
-    private void registrarUsuario() {
-        String user = txtUsuario.getText().trim();
-        String pass = new String(txtClave.getPassword()).trim();
-        String nombre = txtNombre.getText().trim();
-        if (user.isEmpty() || pass.isEmpty() || nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Todos los campos son obligatorios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        VentanaLogin.USUARIOS.add(new Usuario(user, pass, nombre));
-        JOptionPane.showMessageDialog(frame, "¡Usuario registrado con éxito!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        volverLogin();
-    }
-    private void volverLogin() {
-        frame.dispose();
-        new VentanaLogin().mostrarVentana();
-    }
 }
-
