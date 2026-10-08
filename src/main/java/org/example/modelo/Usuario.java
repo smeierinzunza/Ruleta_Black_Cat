@@ -24,7 +24,7 @@ public class Usuario {
         return this.username.equals(u) && this.password.equals(p);
     }
 
-    public String GetUsername(){
+    public String getUsername(){
         return username;
     }
 

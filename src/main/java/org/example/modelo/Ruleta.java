@@ -1,7 +1,6 @@
 package org.example.modelo;
-import java.util.Random;
-import java.util.Scanner;
 
+import java.util.Random;
 
 public class Ruleta {
     private int saldo;
@@ -11,17 +10,19 @@ public class Ruleta {
             19, 21, 23, 25, 27, 30, 32, 34, 36
     };
 
+    // Constructores sobrecargados
     public Ruleta() {
         this(0);
-
     }
 
-    public Ruleta(int saldoInicial){
-        this.saldo = Math.max(saldoIncial, 0);
+    public Ruleta(int saldoInicial) {
+        this.saldo = Math.max(saldoInicial, 0);
     }
+
     public int girarRuleta() {
         return rng.nextInt(37);
     }
+
     public boolean evaluarResultado(int numero, TipoApuesta tipo) {
         if (numero == 0) return false;
         return switch (tipo) {
@@ -52,7 +53,3 @@ public class Ruleta {
         this.saldo = Math.max(saldo, 0);
     }
 }
-
-
-
-
