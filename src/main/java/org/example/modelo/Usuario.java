@@ -16,9 +16,8 @@ public class Usuario {
     public Usuario(String username, String password, String nombre) {
         this(username, password, nombre, 1000);
     }
-    public Usuario(){
-        this("invitado, "1234, "Invitado", 500 );
-
+    public Usuario() {
+        this("invitado", "1234", "Invitado", 500);
     }
 
     public boolean validarCredenciales(String u, String p) {
