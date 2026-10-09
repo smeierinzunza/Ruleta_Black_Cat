@@ -13,7 +13,6 @@ public class ResultadoController {
 
     public List<Resultado> getHistorial() {
         return new ArrayList<>(historial);
-
     }
 
 }
