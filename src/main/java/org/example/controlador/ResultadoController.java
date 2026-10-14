@@ -1,7 +1,6 @@
 package org.example.controlador;
 import org.example.modelo.Resultado;
 import org.w3c.dom.html.HTMLIsIndexElement;
-
 import java.util.List;
 import java.util.ArrayList;
 
