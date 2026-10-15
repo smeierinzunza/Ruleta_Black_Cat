@@ -1,16 +1,18 @@
 package org.example.modelo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Ruleta {
     private int saldo;
     private final Random rng = new Random();
+    private final List<Resultado> resultadosProducidos = new ArrayList<>();
     private final int[] numerosRojos = {
             1, 3, 5, 7, 9, 12, 14, 16, 18,
             19, 21, 23, 25, 27, 30, 32, 34, 36
     };
 
-    // Constructores sobrecargados
     public Ruleta() {
         this(0);
     }
@@ -40,16 +42,16 @@ public class Ruleta {
         return false;
     }
 
-    public int getSaldo() { return saldo; }
-
-    public void depositar(int monto) {
-        if (monto <= 0) {
-            throw new IllegalArgumentException("Monto no válido.");
+    public void registrarResultado(Resultado res) {
+        if (res != null) {
+            this.resultadosProducidos.add(res);
         }
-        this.saldo += monto;
     }
 
-    public void setSaldo(int saldo) {
-        this.saldo = Math.max(saldo, 0);
+    public List<Resultado> getResultadosProducidos() {
+        return new ArrayList<>(resultadosProducidos);
     }
+
+    public int getSaldo() { return saldo; }
+    public void setSaldo(int saldo) { this.saldo = Math.max(saldo, 0); }
 }

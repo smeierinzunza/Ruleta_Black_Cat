@@ -1,17 +1,22 @@
 package org.example.controlador;
+
 import org.example.modelo.Resultado;
-import org.w3c.dom.html.HTMLIsIndexElement;
-import java.util.List;
+import org.example.modelo.Usuario;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResultadoController {
-    private final List<Resultado> historial = new ArrayList<>();
-    public void agregarResultado(Resultado res) {
-        historial.add(res);
+    private final SessionController session;
+
+    public ResultadoController(SessionController session) {
+        this.session = session;
     }
 
-    public List<Resultado> getHistorial() {
-        return new ArrayList<>(historial);
+    public List<Resultado> obtenerHistorialUsuario() {
+        Usuario usuario = session.getUsuarioActual();
+        if (usuario != null) {
+            return usuario.getHistorial();
+        }
+        return new ArrayList<>();
     }
-
 }

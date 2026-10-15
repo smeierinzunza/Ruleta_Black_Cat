@@ -43,7 +43,7 @@ public class VentanaLogin {
         String pass = new String(txtClave.getPassword()).trim();
 
         if (session.iniciarSesion(user, pass)) {
-            JOptionPane.showMessageDialog(frame, "¡Bienvenido, " + session.getNombreUsuario() + "!");
+            JOptionPane.showMessageDialog(frame, "¡Bienvenido/a, " + session.getNombreUsuario() + "!");
             frame.dispose();
             new VentanaMenu(session).mostrarVentana();
         } else {

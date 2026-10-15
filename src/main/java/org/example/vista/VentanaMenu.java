@@ -1,13 +1,11 @@
 package org.example.vista;
 
-import org.example.controlador.ResultadoController;
 import org.example.controlador.SessionController;
 import javax.swing.*;
 import java.awt.*;
 
 public class VentanaMenu {
     private final SessionController session;
-    private final ResultadoController resultadoController = new ResultadoController();
     private final JFrame frame = new JFrame("RULETA - Casino Black Cat");
     private final JLabel lblSaldo = new JLabel();
 
@@ -37,11 +35,11 @@ public class VentanaMenu {
         JTextArea txtInfo = new JTextArea();
         txtInfo.setEditable(false);
         txtInfo.setText("Bienvenido/a " + session.getNombreUsuario() + "\n\n" +
-                "Opciones:\n" +
-                "- Jugar: abre la mesa de apuestas.\n" +
-                "- Perfil: consulta/actualiza tus datos y recarga saldo.\n" +
-                "- Historial: consulta rondas anteriores.\n" +
-                "- Salir: cierra sesión.");
+                "A la izquierda tienes:\n" +
+                "- Jugar: abre la ventana de juego.\n" +
+                "- Historial: abre la ventana con tu historial de jugadas.\n" +
+                "- Perfil: modifica tus datos y recarga saldo.\n" +
+                "- Salir: cierra sesión y vuelve al login.");
 
         actualizarSaldoLabel();
 
@@ -54,15 +52,15 @@ public class VentanaMenu {
 
         btnJugar.addActionListener(e -> {
             frame.dispose();
-            new VentanaRuleta(session, resultadoController).mostrarVentana();
+            new VentanaRuleta(session).mostrarVentana();
+        });
+
+        btnHistorial.addActionListener(e -> {
+            frame.dispose();
+            new VentanaHistorial(session).mostrarVentana();
         });
 
         btnPerfil.addActionListener(e -> mostrarPerfil());
-
-        btnHistorial.addActionListener(e -> {
-            int totalRondas = resultadoController.getHistorial().size();
-            JOptionPane.showMessageDialog(frame, "Rondas jugadas en esta sesión: " + totalRondas);
-        });
 
         btnSalir.addActionListener(e -> {
             session.cerrarSesion();
@@ -92,11 +90,9 @@ public class VentanaMenu {
                 int monto = Integer.parseInt(montoStr.trim());
                 session.depositarSaldo(monto);
                 actualizarSaldoLabel();
-                JOptionPane.showMessageDialog(frame, "Depósito exitoso.");
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(frame, "Monto numérico no válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (IllegalArgumentException ex) {
-                JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Depósito realizado.");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, "Monto inválido.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

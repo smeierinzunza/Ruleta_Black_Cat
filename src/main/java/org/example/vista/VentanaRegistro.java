@@ -43,11 +43,11 @@ public class VentanaRegistro {
     private void registrar() {
         try {
             session.registrarUsuario(txtUsuario.getText(), new String(txtClave.getPassword()), txtNombre.getText());
-            JOptionPane.showMessageDialog(frame, "¡Registro exitoso! Por favor inicie sesión.");
+            JOptionPane.showMessageDialog(frame, "¡Registro exitoso!");
             frame.dispose();
             new VentanaLogin(session).mostrarVentana();
         } catch (IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error de Registro", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
         }
     }
 

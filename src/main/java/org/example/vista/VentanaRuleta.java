@@ -1,6 +1,5 @@
 package org.example.vista;
 
-import org.example.controlador.ResultadoController;
 import org.example.controlador.RuletaController;
 import org.example.controlador.SessionController;
 import org.example.modelo.Resultado;
@@ -19,9 +18,9 @@ public class VentanaRuleta {
     private final JLabel lblResultado = new JLabel("Esperando apuesta...");
     private final JLabel lblSaldo = new JLabel();
 
-    public VentanaRuleta(SessionController session, ResultadoController resultadoController) {
+    public VentanaRuleta(SessionController session) {
         this.session = session;
-        this.ruletaController = new RuletaController(session, resultadoController);
+        this.ruletaController = new RuletaController(session);
         configurarUI();
     }
 
@@ -78,7 +77,7 @@ public class VentanaRuleta {
             actualizarSaldo();
 
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(frame, "Ingrese un monto numérico válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Ingrese un monto válido.", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (IllegalArgumentException | IllegalStateException ex) {
             JOptionPane.showMessageDialog(frame, ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
         }

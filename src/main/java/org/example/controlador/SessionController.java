@@ -9,18 +9,17 @@ public class SessionController {
     private Usuario usuarioActual;
 
     public SessionController() {
-        // Usuarios semilla
         usuarios.add(new Usuario("admin", "1234", "Don Donnie", 5000));
         usuarios.add(new Usuario("jugador1", "paso123", "Gato Afortunado", 1000));
     }
 
     public void registrarUsuario(String usuario, String clave, String nombre) {
         if (usuario == null || usuario.isBlank() || clave == null || clave.isBlank() || nombre == null || nombre.isBlank()) {
-            throw new IllegalArgumentException("Todos los datos son requeridos.");
+            throw new IllegalArgumentException("Todos los campos son obligatorios.");
         }
         for (Usuario u : usuarios) {
             if (u.getUsername().equalsIgnoreCase(usuario.trim())) {
-                throw new IllegalArgumentException("El nombre de usuario ya existe.");
+                throw new IllegalArgumentException("El nombre de usuario ya está registrado.");
             }
         }
         usuarios.add(new Usuario(usuario.trim(), clave.trim(), nombre.trim()));
@@ -36,35 +35,18 @@ public class SessionController {
         return false;
     }
 
-    public boolean hayUsuario() {
-        return usuarioActual != null;
-    }
-
-    public String getNombreUsuario() {
-        return hayUsuario() ? usuarioActual.getNombre() : "";
-    }
-
-    public int getSaldoActual() {
-        return hayUsuario() ? usuarioActual.getSaldo() : 0;
-    }
-
-    public Usuario getUsuarioActual() {
-        return usuarioActual;
-    }
+    public boolean hayUsuario() { return usuarioActual != null; }
+    public String getNombreUsuario() { return hayUsuario() ? usuarioActual.getNombre() : ""; }
+    public int getSaldoActual() { return hayUsuario() ? usuarioActual.getSaldo() : 0; }
+    public Usuario getUsuarioActual() { return usuarioActual; }
 
     public void actualizarNombre(String nuevoNombre) {
-        if (hayUsuario()) {
-            usuarioActual.setNombre(nuevoNombre);
-        }
+        if (hayUsuario()) usuarioActual.setNombre(nuevoNombre);
     }
 
     public void depositarSaldo(int monto) {
-        if (hayUsuario()) {
-            usuarioActual.depositar(monto);
-        }
+        if (hayUsuario()) usuarioActual.depositar(monto);
     }
 
-    public void cerrarSesion() {
-        usuarioActual = null;
-    }
+    public void cerrarSesion() { usuarioActual = null; }
 }

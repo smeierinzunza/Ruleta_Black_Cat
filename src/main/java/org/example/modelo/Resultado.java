@@ -12,13 +12,9 @@ public class Resultado {
         this.monto = monto;
         this.acierto = acierto;
     }
-    public int getNumero() {
-        return numero; }
-    public TipoApuesta getTipo(){
-        return tipo;}
-    public int getMonto(){
-        return monto;}
-    public boolean isAcierto(){
-        return acierto;}
 
+    public int getNumero() { return numero; }
+    public TipoApuesta getTipo() { return tipo; }
+    public int getMonto() { return monto; }
+    public boolean isAcierto() { return acierto; }
 }
