@@ -1,0 +1,73 @@
+Pregunta 1. ¿Qué relaciones deberían incorporarse al diagrama? 
+• Préstamo - Socio: asociación. El préstamo guarda un socio. Es una relación duradera, que se mantiene como estado del objeto. 
+• Préstamo - Libro: asociación. Cada préstamo guarda un libro.
+• Préstamo - Impresora: dependencia (uso). El comprobante se imprime con la impresora. Solo la usa de forma transitoria. 
+Socio y Libro no se relacionan directamente: solo se conectan a través de Préstamo, porque al devolver el libro el socio y el libro siguen registrados, es decir, tienen ciclo de vida independiente del préstamo. 
+Pregunta 2. Multiplicidades 
+• Préstamo a Socio : cada préstamo pertenece a exactamente un socio. Un socio puede tener ninguno o muchos préstamos, porque está guardado en el historial.
+• Préstamo a Libro: cada préstamo corresponde a exactamente un libro. Un libro puede tener ninguno o muchos préstamos a lo largo del tiempo, aunque solo uno esté activo a la vez. 
+• La dependencia de la Impresora no lleva a la multiplicidad. 
+Pregunta 3. ¿Bastaría representar todas las relaciones como dependencias? 
+No. Una dependencia es un uso temporal y no expresaría que el préstamo guarda al socio y al libro. dice que, tras devolver, el préstamo se conserva en el historial con su socio y su libro. Eso significa que una depende de la otra. Solo la impresora, que no se guarda, es realmente una dependencia. 
+Pregunta 4. ¿Qué objetos debería guardar Préstamo como atributos? 
+Debería guardar el Socio y el Libro ya que estos atributos dependen del préstamo, y la impresora como es independiente, el préstamo no guarda la Impresora ni, y tampoco necesita guardar las multas, ya que se calcula al devolver.
+
+Pregunta 5. Parámetros y tipos para devolver 
+devolver(int diasAtraso, Impresora impresora) 
+• int diasAtraso: sirve para calcular la multa ($500 por cada día de atraso; si es 0, no hay multa). 
+• Impresora impresora: es el objeto con el que se imprime el comprobante en ese momento, sin guardarlo como atributo.
+
+
+
+Actividad 2: relaciones en el código 
+Pregunta 1. ¿Dónde se reflejan las asociaciones y dependencias? 
+• private Socio socio; y private Libro libro; en Préstamo son asociaciones: son atributos de la clase y se inicializan en el constructor. 
+• devolver(int diasAtraso, Impresora impresora) es una dependencia hacia Impresora: la recibe como parámetro, la usa en impresora.imprimir(...) y no la guarda. 
+• Las llamadas socio.getNombre() y libro.getTitulo() usan las asociaciones ya existentes; no son relaciones nuevas. 
+Pregunta 2. ¿Cuántas asociaciones y dependencias hay? 
+Hay 3 relaciones: 2 asociaciones (Prestamo-Socio y Prestamo-Libro) y 1 dependencia (Prestamo-Impresora). 
+Pregunta 3. ¿Existe una relación directa entre Socio y Libro? 
+No. Socio solo tiene un atributo String nombre y Libro solo tiene un atributo String título. Ninguna de las dos clases tienen atributos, parámetros ni llamadas hacia la otra. Solo se vinculan indirectamente a través de Préstamo. 
+Pregunta 4. ¿La clase Préstamo aplica SRP? 
+No. Préstamo tiene varias razones para cambiar: 
+• La política de multa, si cambia el monto o la regla de cálculo. 
+• El formato del comprobante, si cambia su texto o contenido. 
+• El estado del préstamo, por ejemplo si se agrega una fecha de devolución. 
+La clase mezcla datos del préstamo, lógica de negocio y construcción de texto. 
+
+
+
+
+Separación propuesta: 
+class Prestamo { // solo estado del prestamo 
+ private Socio socio; 
+ private Libro libro; 
+ private boolean devuelto; 
+ public Prestamo(Socio socio, Libro libro) { 
+ this.socio = socio; 
+ this.libro = libro; 
+ this.devuelto = false; 
+ } 
+ public void marcarDevuelto() { devuelto = true; } 
+ public boolean estaDevuelto() { return devuelto; } 
+ public Socio getSocio() { return socio; } 
+ public Libro getLibro() { return libro; } 
+} 
+class CalculadoraMulta { // regla de la multa 
+ public int calcular(int diasAtraso) { 
+ return diasAtraso > 0 ? diasAtraso * 500 : 0; 
+ } 
+}
+class GeneradorComprobante { // formato del comprobante 
+ public String generar(Prestamo p, int multa) { 
+ return "Socio: " + p.getSocio().getNombre() 
+ + "\nLibro: " + p.getLibro().getTitulo() 
+ + "\nMulta: $" + multa; 
+ } 
+} 
+class ServicioDevolucion { // coordina el proceso 
+ public void devolver(Prestamo p, int diasAtraso, Impresora imp) {  p.marcarDevuelto(); 
+ int multa = new CalculadoraMulta().calcular(diasAtraso); 
+ imp.imprimir(new GeneradorComprobante().generar(p, multa));  } 
+} 
+Así, cada clase tiene una sola razón para cambiar. La Impresora sigue siendo solo una dependencia, ahora de ServicioDevolucion.
