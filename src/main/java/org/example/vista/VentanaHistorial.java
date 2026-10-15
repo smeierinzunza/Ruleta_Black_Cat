@@ -8,7 +8,6 @@ import java.awt.*;
 import java.util.List;
 
 
-
 public class VentanaHistorial {
     private final SessionController session;
     private final ResultadoController resultadoController;
