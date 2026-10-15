@@ -59,7 +59,6 @@ public class VentanaHistorial {
         frame.add(scrollPane, BorderLayout.CENTER);
         frame.add(panelBoton, BorderLayout.SOUTH);
     }
-
     public void mostrarVentana() {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
