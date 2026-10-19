@@ -16,21 +16,24 @@ public class VentanaMenu {
 
     private void configurarUI() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(520, 320);
+        frame.setSize(520, 360);
         frame.setLayout(new BorderLayout());
 
-        JPanel panelBotones = new JPanel(new GridLayout(4, 1, 8, 8));
+        JPanel panelBotones = new JPanel(new GridLayout(5, 1, 8, 8));
         panelBotones.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         JButton btnJugar = new JButton("Jugar");
         JButton btnPerfil = new JButton("Perfil");
         JButton btnHistorial = new JButton("Historial");
+        JButton btnEstadistica = new JButton("Estadistica");
         JButton btnSalir = new JButton("Salir");
 
         panelBotones.add(btnJugar);
         panelBotones.add(btnPerfil);
         panelBotones.add(btnHistorial);
+        panelBotones.add(btnEstadistica);
         panelBotones.add(btnSalir);
+
 
         JTextArea txtInfo = new JTextArea();
         txtInfo.setEditable(false);
@@ -38,6 +41,7 @@ public class VentanaMenu {
                 "A la izquierda tienes:\n" +
                 "- Jugar: abre la ventana de juego.\n" +
                 "- Historial: abre la ventana con tu historial de jugadas.\n" +
+                "- Estadistica: racha %, % de victorias y metricas."+
                 "- Perfil: modifica tus datos y recarga saldo.\n" +
                 "- Salir: cierra sesión y vuelve al login.");
 
@@ -58,6 +62,11 @@ public class VentanaMenu {
         btnHistorial.addActionListener(e -> {
             frame.dispose();
             new VentanaHistorial(session).mostrarVentana();
+        });
+
+        btnEstadistica.addActionListener(e ->{
+            frame.dispose();
+            new VentanaEstadistica(session).mostrarVentana();
         });
 
         btnPerfil.addActionListener(e -> mostrarPerfil());
